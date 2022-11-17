@@ -1,11 +1,10 @@
 /// Basic constants for the project like urls and keys
 class Constants {
   /// Api url
-  static const String api = 'https://tjntwcbqnaonomvopzon.supabase.co';
+  static const String api = 'https://{ PERMANENTLY HIDDEN }.supabase.co';
 
   /// Api key
-  static const String apiKey =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqbnR3Y2JxbmFvbm9tdm9wem9uIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY2NjM1NTAwMywiZXhwIjoxOTgxOTMxMDAzfQ.21nA-SR1cx8EIRI6oXr65N_tMVKWfjF86MJ8oID3cfM';
+  static const String apiKey = 'PERMANENTLY HIDDEN';
 
   /// Api request <-> response type
   static const String apiTypeRest = 'rest';
