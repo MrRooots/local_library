@@ -2,7 +2,7 @@
 
 Simple local library application
 
-### Screens
+### Screens (all related logic is implemented in the application)
   - splash
   - login
   - register
