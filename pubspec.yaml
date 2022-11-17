@@ -1,0 +1,77 @@
+name: local_library
+
+description: Simple local library application
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.2 <3.3.5'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Core access
+  shared_preferences: ^2.0.15
+  permission_handler: ^10.2.0
+  path_provider: ^2.0.11
+  path: ^1.8.2
+
+  # Services
+  internet_connection_checker: ^1.0.0+1
+  image_picker: ^0.8.6
+  flutter_svg: ^1.1.6
+  sqflite: ^2.1.0+1
+  crypto: ^3.0.2
+  intl: ^0.17.0
+  http: ^0.13.5
+  uuid: ^3.0.6
+
+  # Architecture
+  flutter_bloc: ^8.1.1
+  equatable: ^2.0.5
+  get_it: ^7.2.0
+  dartz: ^0.10.1
+  bloc: ^8.1.0
+
+  # Widgets
+  awesome_snackbar_content: ^0.0.8
+  cupertino_icons: ^1.0.2
+  flutter_spinkit: ^5.1.0
+  flip_card: ^0.6.0
+  badges: ^2.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/img/l_letter.jpg
+    - assets/img/login_bottom.png
+    - assets/img/main_top.png
+    - assets/img/signup_top.png
+    - assets/img/main_bottom.png
+    - assets/img/avatar.png
+    - assets/img/empty.png
+    - assets/img/intro_1.png
+    - assets/img/intro_2.png
+    - assets/img/start.png
+    - assets/img/welcome.png
+    - assets/img/no_connection.png
+    - assets/icons/back.svg
+
+  fonts:
+    - family: Muli
+      fonts:
+        - asset: assets/fonts/muli/Muli.ttf
+        - asset: assets/fonts/muli/Muli-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/muli/Muli-Light.ttf
+          weight: 300
