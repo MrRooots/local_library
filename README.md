@@ -2,15 +2,28 @@
 
 Simple local library application
 
-## Getting Started
+# Screens (all related logic is implemented in the application)
+  - splash
+  - login
+  - register
+  - profile
+  - books list
+  - cart with selected books
+  - search
+  - placed orders
+  
+# Previews
 
-This project is a starting point for a Flutter application.
+<h2 align="center"> Login and profile </h2>
 
-A few resources to get you started if this is your first Flutter project:
+<p align="center">
+  <img width="35%" src="https://user-images.githubusercontent.com/46628524/202442678-2edce1f5-ba36-4614-acc6-fdd8c46cf6b9.png">
+  <img width="35%" src="https://user-images.githubusercontent.com/46628524/202443131-e49bd43d-24db-40ba-ae5a-a0174fee31ea.png">
+</p>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<h2 align="center"> Books list and cart with selected books </h2>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<p align="center">
+  <img width="35%" src="https://user-images.githubusercontent.com/46628524/202443164-6fbf1f98-7e70-4ce2-9d7a-2997fb4e94ae.png">
+  <img width="35%" src="https://user-images.githubusercontent.com/46628524/202443174-7a0f862d-c809-4930-a624-660c2455d469.png">
+</p>
