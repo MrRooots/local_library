@@ -3,11 +3,12 @@
 Simple local library application.
 
 App store all information remotely using [Supabase](https://supabase.com/) database and storage.
-Database access via pure http requests according to [PosgREST](https://postgrest.org/en/stable/api.html) documenation
+Database access via pure http requests according to [PosgREST](https://postgrest.org/en/stable/api.html) documenation. 
+Implemented own simple [SupabaseAPI](https://github.com/MrRooots/local_library/blob/master/lib/services/supabase_api.dart) with helper function.
 
 Icons and illustrations: flutter default and [icons8](https://icons8.com/)
 
-# Screens (all related logic is implemented in the application)
+# Screens (Pages)
   - [splash](https://github.com/MrRooots/local_library/blob/master/lib/presentation/pages/splash.dart) (all data loading)
   - [login](https://github.com/MrRooots/local_library/tree/master/lib/presentation/pages/login) (remote verifying credentials)
   - [register](https://github.com/MrRooots/local_library/tree/master/lib/presentation/pages/register) (remote account creation)
@@ -19,7 +20,7 @@ Icons and illustrations: flutter default and [icons8](https://icons8.com/)
   - search (not yet implemented)
   - placed orders (not yet implemented)
   
-# Previews
+# Previews (under development)
 
 <h2 align="center"> Login and profile </h2>
 
