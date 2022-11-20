@@ -1,6 +1,6 @@
 # local_library
 
-Simple local library application.
+Simple local library application (with emphasis on IOS design :) ).
 
 App store all information remotely using [Supabase](https://supabase.com/) database and storage.
 Database access via pure http requests according to [PosgREST](https://postgrest.org/en/stable/api.html) documenation. 
