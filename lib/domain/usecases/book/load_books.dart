@@ -14,7 +14,7 @@ class LoadBooksParams {
   const LoadBooksParams({
     this.id,
     this.offset = 0,
-    this.limit = 20,
+    this.limit = 10,
     this.author = '',
     this.publishedBetween = const [null, null],
   });

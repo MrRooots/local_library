@@ -4,7 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:local_library/core/themes/palette.dart';
 import 'package:local_library/presentation/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:local_library/presentation/bloc/customer_login/customer_login_bloc.dart';
-import 'package:local_library/presentation/widgets/components/background_blob.dart';
+import 'package:local_library/presentation/widgets/background_blob.dart';
+import 'package:local_library/presentation/widgets/loading_indicator.dart';
 
 /// Application [SplashPage]
 class SplashPage extends StatelessWidget {
@@ -36,17 +37,7 @@ class SplashPage extends StatelessWidget {
                   screenWidth: MediaQuery.of(context).size.width,
                   blobCount: 3,
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text('Local Library Account',
-                        style: TextStyle(fontSize: 24.0)),
-                    SizedBox(height: 50),
-                    SpinKitSpinningLines(color: Palette.lightGreenSalad),
-                    SizedBox(height: 20),
-                    Text('Loading... Please wait')
-                  ],
-                ),
+                const LoadingIndicator(),
               ],
             ),
           ),

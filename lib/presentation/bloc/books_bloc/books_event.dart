@@ -10,3 +10,7 @@ abstract class BooksEvent extends Equatable {
 class LoadBooksEvent extends BooksEvent {
   const LoadBooksEvent();
 }
+
+class ReloadBooksEvent extends BooksEvent {
+  const ReloadBooksEvent();
+}

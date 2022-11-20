@@ -106,4 +106,25 @@ class BookRepositoryImpl implements BookRepository {
       return right(UndefinedFailure(errorMessage: error.toString()));
     }
   }
+
+  @override
+  Future<Either<void, Failure>> updateBook({
+    required BookEntity newBook,
+  }) async {
+    try {
+      await remoteDataSource.updateBook(book: newBook as BookModel);
+      print('load');
+      return left(null);
+    } on ServerException catch (error) {
+      return right(ServerFailure(errorMessage: error.toString()));
+    } on ConnectionException catch (_) {
+      return right(ConnectionFailure());
+    } on LoginException catch (error) {
+      return right(LoginFailure(errorMessage: error.toString()));
+    } on CacheException catch (error) {
+      return right(CacheFailure(errorMessage: error.toString()));
+    } catch (error) {
+      return right(UndefinedFailure(errorMessage: error.toString()));
+    }
+  }
 }

@@ -1,23 +1,24 @@
 import 'package:equatable/equatable.dart';
-import 'package:local_library/data/models/book.dart';
+import 'package:local_library/core/constants/types.dart';
 import 'package:local_library/data/models/customer.dart';
+import 'package:local_library/domain/entities/book_entity.dart';
 
 class RequestEntity extends Equatable {
-  final String id;
+  final int id;
+  final RequestType type;
   final DateTime createdAt;
   final DateTime expiredAt;
-  final CustomerModel customer;
-  final List<BookModel> books;
+  final List<BookEntity> books;
 
   /// Constructor
   const RequestEntity({
     required this.id,
+    required this.type,
     required this.createdAt,
     required this.expiredAt,
-    required this.customer,
     this.books = const [],
   });
 
   @override
-  List<Object?> get props => [id, createdAt, expiredAt, customer, books];
+  List<Object?> get props => [id, type, createdAt, expiredAt, books];
 }

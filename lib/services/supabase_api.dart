@@ -2,16 +2,21 @@ import 'package:local_library/core/constants/constants.dart';
 
 /// Class provides common operatios with remote database using their api
 class SupabaseApi {
-  static String mapParamsToUrl({required final Map<String, String> params}) {
+  static String mapParamsToUrl({
+    required final Map<String, String> params,
+    final bool orderById = false,
+  }) {
     return params.entries
-        .map((final e) {
-          final value = e.value.split('.').last;
-          return value.isNotEmpty && !(e.key.contains('id') && value == 'null')
-              ? '${e.key}=${e.value}'
-              : '';
-        })
-        .where((final String el) => el.isNotEmpty)
-        .join('&');
+            .map((final e) {
+              final value = e.value.split('.').last;
+              return value.isNotEmpty &&
+                      !(e.key.contains('id') && value == 'null')
+                  ? '${e.key}=${e.value}'
+                  : '';
+            })
+            .where((final String el) => el.isNotEmpty)
+            .join('&') +
+        (orderById ? '&order=id' : '');
   }
 
   static Uri buildUrlForStorage({required final String filename}) {
@@ -24,12 +29,16 @@ class SupabaseApi {
 
   static Uri buildUrlForTable({
     required final String tableName,
-    required final Map<String, String> queryParams,
+    final Map<String, String> queryParams = const {},
+    final bool orderById = false,
   }) {
     final String url =
         '${Constants.api}/${Constants.apiTypeRest}/${Constants.apiVersion}/$tableName';
 
-    final String query = mapParamsToUrl(params: queryParams);
+    final String query = mapParamsToUrl(
+      params: queryParams,
+      orderById: orderById,
+    );
 
     final Uri result = Uri.parse("$url${query.isNotEmpty ? '?$query' : ''}");
 
@@ -58,6 +67,20 @@ class SupabaseApi {
     final String whereQuery = mapParamsToUrl(params: whereParams);
     print('Request url: ${whereQuery.isNotEmpty ? '$url&$whereQuery' : url}');
     return Uri.parse(whereQuery.isNotEmpty ? '$url&$whereQuery' : url);
+  }
+
+  static Uri buildUrlForFunction({
+    required final String function,
+    final String param = '',
+  }) {
+    String url = '${Constants.api}/'
+        '${Constants.apiTypeRest}/'
+        '${Constants.apiVersion}/rpc/'
+        '$function${param.isNotEmpty ? '?$param' : ''}';
+
+    print('Request url: $url');
+
+    return Uri.parse(url);
   }
 
   /// Build request headers

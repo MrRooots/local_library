@@ -1,12 +1,14 @@
 import 'dart:convert' as convert;
 
 import 'package:http/http.dart' as http;
+import 'package:local_library/domain/entities/book_entity.dart';
+
+import 'package:local_library/services/supabase_api.dart';
+
 import 'package:local_library/core/constants/constants.dart';
 import 'package:local_library/core/failures/exceptions.dart';
 
 import 'package:local_library/data/models/book.dart';
-import 'package:local_library/services/supabase_api.dart';
-import 'package:local_library/services/network_info.dart';
 
 abstract class BookRemoteDataSource {
   /// Request all books from database using provided api
@@ -29,6 +31,8 @@ abstract class BookRemoteDataSource {
   ///
   /// Returns the count of remaining books
   Future<int> getBookRemainsCount({required final int bookId});
+
+  Future<void> updateBook({required final BookModel book});
 }
 
 class BookRemoteDataSourceImpl implements BookRemoteDataSource {
@@ -38,9 +42,9 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
 
   @override
   Future<List<BookModel>> getAllBooks() async {
-    final http.Response response = await http.get(
-      Uri.parse('${Constants.api}/rest/v1/book'),
-      headers: Constants.authHeaders,
+    final http.Response response = await client.get(
+      SupabaseApi.buildUrlForTable(tableName: 'book', orderById: true),
+      headers: SupabaseApi.getRequestHeaders(),
     );
 
     return fetchResponse(response: response);
@@ -54,7 +58,7 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
     final String author = '',
     final List<DateTime?> publishedBetween = const [null, null],
   }) async {
-    final http.Response response = await http.get(
+    final http.Response response = await client.get(
       SupabaseApi.buildUrlForTable(
         tableName: 'book',
         queryParams: {
@@ -63,15 +67,17 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
           'limit': '$limit',
           'author': 'eq.$author',
         },
+        orderById: true,
       ),
-      headers: Constants.authHeaders,
+      headers: SupabaseApi.getRequestHeaders(),
     );
 
     return fetchResponse(response: response);
   }
 
+  @override
   Future<int> getBookRemainsCount({required final int bookId}) async {
-    final http.Response response = await http.get(
+    final http.Response response = await client.get(
       SupabaseApi.buildUrlForJoinTables(
         table1: 'book',
         table2: 'registry',
@@ -81,8 +87,6 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
       ),
       headers: SupabaseApi.getRequestHeaders(singularRecord: true),
     );
-
-    print(response.body);
 
     if (response.statusCode == 200 && response.body.isNotEmpty) {
       final Map<String, dynamic> responseJson = convert.jsonDecode(
@@ -97,10 +101,25 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
 
   /// Parse list of [BookModel] from given [response]
   List<BookModel> fetchResponse({required final http.Response response}) {
-    print('Raw response: ${response.body}');
-
     return (convert.jsonDecode(response.body) as List)
         .map((final j) => BookModel.fromJson(json: j as Map<String, dynamic>))
         .toList();
+  }
+
+  @override
+  Future<void> updateBook({required BookModel book}) async {
+    final http.Response response = await client.patch(
+      SupabaseApi.buildUrlForTable(
+        tableName: 'book',
+        queryParams: {'id': 'eq.${book.id}'},
+        orderById: true,
+      ),
+      body: convert.jsonEncode(book.toJson()),
+      headers: SupabaseApi.getRequestHeaders(),
+    );
+
+    if (response.statusCode != 204 && response.statusCode != 200) {
+      throw ServerException('Book update failed!');
+    }
   }
 }

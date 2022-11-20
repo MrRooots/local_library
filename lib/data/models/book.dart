@@ -29,7 +29,7 @@ class BookModel extends BookEntity {
   /// Convert [BookModel] to json format
   Map<String, dynamic> toJson() {
     return {
-      'book_id': id,
+      'id': id,
       'title': title,
       'author': author,
       'publisher': publisher,
@@ -39,11 +39,11 @@ class BookModel extends BookEntity {
 
   /// Copy current [BookModel] with given parameters
   BookModel copyWith({
-    required int? id,
-    required String? title,
-    required String? author,
-    required String? publisher,
-    required DateTime? publishedAt,
+    int? id,
+    String? title,
+    String? author,
+    String? publisher,
+    DateTime? publishedAt,
   }) {
     return BookModel(
       id: id ?? this.id,

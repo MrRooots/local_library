@@ -40,6 +40,7 @@ dependencies:
   awesome_snackbar_content: ^0.0.8
   cupertino_icons: ^1.0.2
   flutter_spinkit: ^5.1.0
+  animations: ^2.0.7
   flip_card: ^0.6.0
   badges: ^2.0.3
 
@@ -65,6 +66,7 @@ flutter:
     - assets/img/start.png
     - assets/img/welcome.png
     - assets/img/no_connection.png
+    - assets/img/book_placeholder.png
     - assets/icons/back.svg
 
   fonts:

@@ -35,24 +35,6 @@ class MyTheme {
     primaryColorDark: Palette.lightGreenSalad,
     fontFamily: 'Muli',
     visualDensity: VisualDensity.adaptivePlatformDensity,
-    // inputDecorationTheme: const InputDecorationTheme(
-    //   suffixIconColor: Palette.black,
-    //   floatingLabelStyle: TextStyle(color: Palette.black),
-    //   enabledBorder: OutlineInputBorder(
-    //     borderSide: BorderSide(color: Palette.black, width: 2),
-    //     borderRadius: BorderRadius.all(Radius.circular(15)),
-    //   ),
-    //   focusedBorder: OutlineInputBorder(
-    //     borderSide: BorderSide(color: Palette.black, width: 2),
-    //     borderRadius: BorderRadius.all(Radius.circular(15)),
-    //   ),
-    //   errorBorder: OutlineInputBorder(
-    //     borderSide: BorderSide(color: Palette.black, width: 2),
-    //     borderRadius: BorderRadius.all(Radius.circular(15)),
-    //   ),
-    //   errorStyle: TextStyle(fontSize: 14.0),
-    //   focusColor: Palette.black,
-    // ),
     inputDecorationTheme: const InputDecorationTheme(
       suffixIconColor: Palette.black,
       floatingLabelStyle: TextStyle(color: Palette.green),

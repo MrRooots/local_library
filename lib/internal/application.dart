@@ -4,11 +4,12 @@ import 'package:local_library/internal/body.dart';
 
 import 'package:local_library/presentation/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:local_library/presentation/bloc/books_bloc/books_bloc.dart';
-import 'package:local_library/presentation/bloc/customer_cart_cubit/customer_cart_cubit.dart';
+import 'package:local_library/presentation/bloc/customer_cart_bloc/customer_cart_bloc.dart';
 import 'package:local_library/presentation/bloc/customer_login/customer_login_bloc.dart';
 import 'package:local_library/presentation/bloc/customer_register/customer_register_bloc.dart';
 import 'package:local_library/presentation/bloc/image_bloc/image_bloc.dart';
 import 'package:local_library/presentation/bloc/navigation_bloc/navigation_bloc.dart';
+import 'package:local_library/presentation/bloc/update_book_bloc/update_book_bloc.dart';
 
 import 'package:local_library/service_locator.dart';
 
@@ -38,8 +39,11 @@ class LibraryApp extends StatelessWidget {
         BlocProvider<BooksBloc>(
           create: (context) => sl<BooksBloc>(),
         ),
-        BlocProvider<CustomerCartCubit>(
-          create: (context) => sl<CustomerCartCubit>(),
+        BlocProvider<CustomerCartBloc>(
+          create: (context) => sl<CustomerCartBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => sl<UpdateBookBloc>(),
         )
       ],
       child: const ApplicationBody(),

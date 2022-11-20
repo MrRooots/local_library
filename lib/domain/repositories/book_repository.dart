@@ -31,4 +31,9 @@ abstract class BookRepository {
   ///
   /// Returns [bool] on successfull request and [Failure] on error
   Future<Either<bool, Failure>> checkAvailability({required final int bookId});
+
+  /// Update book data with given [newBook]
+  ///
+  /// Returns [void] or [Failure]
+  Future<Either<void, Failure>> updateBook({required final BookEntity newBook});
 }

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:local_library/core/constants/types.dart';
+import 'package:local_library/domain/entities/request_entity.dart';
 
 class CustomerEntity extends Equatable {
   /// Customer database id
@@ -26,6 +27,8 @@ class CustomerEntity extends Equatable {
   /// Customer login status
   final CustomerStatus status;
 
+  final RequestEntity request;
+
   /// Constructor
   const CustomerEntity({
     required this.id,
@@ -36,6 +39,7 @@ class CustomerEntity extends Equatable {
     required this.address,
     required this.phone,
     required this.status,
+    required this.request,
   });
 
   @override
@@ -48,5 +52,6 @@ class CustomerEntity extends Equatable {
         address,
         phone,
         status,
+        request,
       ];
 }

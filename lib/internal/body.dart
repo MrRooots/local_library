@@ -6,15 +6,16 @@ import 'package:local_library/core/themes/theme.dart';
 
 import 'package:local_library/presentation/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:local_library/presentation/bloc/books_bloc/books_bloc.dart';
+import 'package:local_library/presentation/bloc/customer_cart_bloc/customer_cart_bloc.dart';
 import 'package:local_library/presentation/bloc/customer_login/customer_login_bloc.dart';
 import 'package:local_library/presentation/bloc/image_bloc/image_bloc.dart';
 import 'package:local_library/presentation/bloc/navigation_bloc/navigation_bloc.dart';
 
 import 'package:local_library/presentation/pages/home.dart';
-import 'package:local_library/presentation/pages/login.dart';
+import 'package:local_library/presentation/pages/login/login.dart';
 import 'package:local_library/presentation/pages/splash.dart';
 
-import 'package:local_library/presentation/widgets/components/scroll_behavior.dart';
+import 'package:local_library/presentation/widgets/scroll_behavior.dart';
 
 class ApplicationBody extends StatelessWidget {
   const ApplicationBody({super.key});
@@ -45,6 +46,25 @@ class ApplicationBody extends StatelessWidget {
 
             // Load books
             BlocProvider.of<BooksBloc>(context).add(const LoadBooksEvent());
+
+            // Load customer cart
+            BlocProvider.of<CustomerCartBloc>(context)
+                .add(RestoreCustomerCart(customer: state.customer));
+          } else if (state is AuthenticationLoggedOut) {
+            // Reset form
+            BlocProvider.of<CustomerLoginBloc>(context).close();
+
+            // Set initial screen
+            BlocProvider.of<NavigationBloc>(context).close();
+
+            // Load customer profile image
+            BlocProvider.of<ImageBloc>(context).close();
+
+            // Load books
+            BlocProvider.of<BooksBloc>(context).close();
+
+            // Load customer cart
+            BlocProvider.of<CustomerCartBloc>(context).close();
           }
         },
         builder: (context, state) => AnimatedSwitcher(

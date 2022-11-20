@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:local_library/core/constants/types.dart';
 
 import 'package:local_library/domain/entities/customer_entity.dart';
 import 'package:local_library/domain/usecases/customer/logout_customer.dart';
@@ -22,7 +23,16 @@ class AuthenticationBloc
   /// Get [CustomerEntity] from [AuthenticationAuth] state
   ///
   /// Returns [CustomerEntity] or [null]
-  CustomerEntity getCustomer() => (state as AuthenticationAuth).customer;
+  CustomerEntity get getCustomer => (state as AuthenticationAuth).customer;
+
+  /// Check if [CustomerEntity] is Admin { [CustomerStatus.admin] }
+  bool get isAdmin => getCustomer.status == CustomerStatus.admin;
+
+  /// Check if [CustomerEntity] is Moderator { [CustomerStatus.moderator] }
+  bool get isModerator => getCustomer.status == CustomerStatus.moderator;
+
+  /// Check if [CustomerEntity] is User { [CustomerStatus.user] }
+  bool get isUser => getCustomer.status == CustomerStatus.user;
 
   /// Logout customer
   Future<void> _logoutCustomer(

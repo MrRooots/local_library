@@ -1,17 +1,12 @@
-import 'dart:io';
 import 'dart:convert' as convert;
 
 import 'package:http/http.dart' as http;
 import 'package:local_library/core/constants/constants.dart';
-import 'package:local_library/core/constants/types.dart';
-
 import 'package:local_library/core/failures/exceptions.dart';
 import 'package:local_library/core/failures/utils.dart';
 import 'package:local_library/data/models/customer.dart';
 import 'package:local_library/data/models/image.dart';
-import 'package:local_library/service_locator.dart';
 import 'package:local_library/services/supabase_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class CustomerRemoteDataSource {
   /// Verify given customer [username] and [password] with database
@@ -19,7 +14,7 @@ abstract class CustomerRemoteDataSource {
   /// Returns [CustomerModel]
   ///
   /// Throws [LoginException] if credentials are invalid
-  Future<CustomerModel> getCustomerData({
+  Future<CustomerModel> verifyCustomerData({
     required final String username,
     required final String password,
   });
@@ -55,27 +50,20 @@ class CustomerRemoteDataSourceImpl<Model> implements CustomerRemoteDataSource {
   const CustomerRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<CustomerModel> getCustomerData({
+  Future<CustomerModel> verifyCustomerData({
     required final String username,
     required final String password,
   }) async {
     final http.Response response = await client.get(
-      SupabaseApi.buildUrlForTable(
-        tableName: 'customer',
-        queryParams: {
-          'username': 'ilike.${username.toLowerCase()}',
-          'password': 'eq.$password',
-          'limit': '1',
-        },
+      SupabaseApi.buildUrlForFunction(
+        function: 'get_customer_data',
+        param: '_username=$username&_password=$password',
       ),
       headers: SupabaseApi.getRequestHeaders(singularRecord: true),
     );
-    print(
-      '''Response valid: 
-      Response body: ${response.body}, 
-      Status code: ${response.statusCode}
-      ''',
-    );
+
+    print(response.body);
+
     if (response.body.isNotEmpty && response.statusCode == 200) {
       final Map<String, dynamic> responseJson =
           convert.jsonDecode(response.body);
@@ -94,13 +82,13 @@ class CustomerRemoteDataSourceImpl<Model> implements CustomerRemoteDataSource {
     http.Response response;
 
     if (await isFileExists(image.filename)) {
-      response = await http.put(
+      response = await client.put(
         url,
         headers: Constants.authHeaders,
         body: await image.imageFileBytes,
       );
     } else {
-      response = await http.post(
+      response = await client.post(
         url,
         headers: Constants.authHeaders,
         body: await image.imageFileBytes,
@@ -118,7 +106,7 @@ class CustomerRemoteDataSourceImpl<Model> implements CustomerRemoteDataSource {
   Future<ImageModel> loadCustomerImage({
     required final CustomerModel customer,
   }) async {
-    final http.Response response = await http.get(
+    final http.Response response = await client.get(
       SupabaseApi.buildUrlForStorage(
         filename: customer.customerAvatarFilename,
       ),
@@ -136,9 +124,9 @@ class CustomerRemoteDataSourceImpl<Model> implements CustomerRemoteDataSource {
   }
 
   Future<bool> isFileExists(final String filename) async {
-    return (await http.get(
+    return (await client.get(
           SupabaseApi.buildUrlForStorage(filename: filename),
-          headers: Constants.authHeaders,
+          headers: SupabaseApi.getRequestHeaders(singularRecord: true),
         ))
             .statusCode ==
         200;
@@ -153,19 +141,16 @@ class CustomerRemoteDataSourceImpl<Model> implements CustomerRemoteDataSource {
     required final String address,
     required final String phone,
   }) async {
-    final http.Response response = await http.post(
-      SupabaseApi.buildUrlForTable(
-        tableName: 'customer',
-        queryParams: const {},
-      ),
-      headers: Constants.authHeaders,
+    final http.Response response = await client.post(
+      SupabaseApi.buildUrlForFunction(function: 'register_customer'),
+      headers: SupabaseApi.getRequestHeaders(),
       body: convert.jsonEncode({
-        'username': username,
-        'password': Utils.encodeString(value: password),
-        'name': name,
-        'surname': surname,
-        'address': address,
-        'phone': phone,
+        '_username': username,
+        '_password': Utils.encodeString(value: password),
+        '_name': name,
+        '_surname': surname,
+        '_address': address,
+        '_phone': phone,
       }),
     );
 
@@ -176,7 +161,9 @@ class CustomerRemoteDataSourceImpl<Model> implements CustomerRemoteDataSource {
       throw LoginException('Customer with this credentials already exists!');
     } else if (response.statusCode == 400) {
       throw LoginException('Something went wrong! Check all required fields!');
-    } else if (response.statusCode != 201) {
+    } else if (response.statusCode != 201 &&
+        response.statusCode != 200 &&
+        response.statusCode != 204) {
       throw UndefinedException(
         '[CustomerRemoteDataSource]: ${response.body}'
         'Mabye everything alright. Try to login with provided credentials :)',

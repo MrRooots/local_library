@@ -6,21 +6,27 @@ import 'package:local_library/core/failures/utils.dart';
 
 import 'package:local_library/data/data_sources/local/customer_local_data_source.dart';
 import 'package:local_library/data/data_sources/remote/customer_remote_data_source.dart';
+import 'package:local_library/data/data_sources/remote/request_remote_data_source.dart';
 import 'package:local_library/data/models/customer.dart';
+import 'package:local_library/data/models/request.dart';
 
 import 'package:local_library/domain/entities/customer_entity.dart';
 import 'package:local_library/domain/repositories/customer_repository.dart';
 import 'package:local_library/services/network_info.dart';
 
 class CustomerRepositoryImpl implements CustomerRepository {
+  final CustomerRemoteDataSource customerRemoteDS;
+  final CustomerLocalDataSource customerLocalDS;
+
+  final RequestRemoteDataSource requestRemoteDS;
+
   final NetworkInfo networkInfo;
-  final CustomerRemoteDataSource remoteDataSource;
-  final CustomerLocalDataSource localDataSource;
 
   const CustomerRepositoryImpl({
     required this.networkInfo,
-    required this.remoteDataSource,
-    required this.localDataSource,
+    required this.customerRemoteDS,
+    required this.customerLocalDS,
+    required this.requestRemoteDS,
   });
 
   @override
@@ -29,13 +35,12 @@ class CustomerRepositoryImpl implements CustomerRepository {
     required final String password,
   }) async {
     try {
-      // Verify login credentials
-      final CustomerModel customer = await remoteDataSource.getCustomerData(
+      final CustomerModel customer = await _getCustomerWithRequest(
         username: username,
-        password: Utils.encodeString(value: password),
+        password: password,
       );
 
-      await localDataSource.saveCustomerToCache(customer: customer);
+      await customerLocalDS.saveCustomerToCache(customer: customer);
 
       return left(customer);
     } on ServerException catch (error) {
@@ -54,11 +59,12 @@ class CustomerRepositoryImpl implements CustomerRepository {
   @override
   Future<Either<CustomerEntity, Failure>> loginWithCache() async {
     try {
-      final CustomerModel customer = await localDataSource.getCachedCustomer;
+      final CustomerModel cachedData = await customerLocalDS.getCachedCustomer;
 
-      await remoteDataSource.getCustomerData(
-        username: customer.username,
-        password: customer.password,
+      final CustomerModel customer = await _getCustomerWithRequest(
+        username: cachedData.username,
+        password: cachedData.password,
+        encodePassword: false,
       );
 
       return left(customer);
@@ -78,7 +84,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
   @override
   Future<Either<void, Failure>> logoutCustomer() async {
     try {
-      await localDataSource.clearCache();
+      await customerLocalDS.clearCache();
 
       return left(null);
     } on CacheException catch (error) {
@@ -100,7 +106,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
     if (await networkInfo.isConnected) {
       try {
         print('Register start');
-        await remoteDataSource.registerCustomer(
+        await customerRemoteDS.registerCustomer(
           username: username,
           password: password,
           name: name,
@@ -121,5 +127,23 @@ class CustomerRepositoryImpl implements CustomerRepository {
     } else {
       return right(ConnectionFailure());
     }
+  }
+
+  Future<CustomerModel> _getCustomerWithRequest({
+    required final String username,
+    required final String password,
+    final bool encodePassword = true,
+  }) async {
+    final CustomerModel customerData =
+        await customerRemoteDS.verifyCustomerData(
+      username: username,
+      password: encodePassword ? Utils.encodeString(value: password) : password,
+    );
+
+    final RequestModel request = await requestRemoteDS
+        .getOrCreateCustomerRequest(customer: customerData);
+    final customer = customerData.copyWith(request: request);
+
+    return customer;
   }
 }

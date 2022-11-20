@@ -1,15 +1,14 @@
 import 'dart:io';
 import 'dart:convert' as convert;
-import 'package:flutter/services.dart';
-import 'package:local_library/data/models/image.dart';
 
-import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:local_library/core/constants/constants.dart';
 import 'package:local_library/core/failures/exceptions.dart';
+
+import 'package:local_library/data/models/image.dart';
 import 'package:local_library/data/models/customer.dart';
 
 abstract class CustomerLocalDataSource {

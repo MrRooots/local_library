@@ -1,10 +1,10 @@
 import 'dart:convert' as convert;
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crypto/crypto.dart' as crypto;
-import 'package:flutter/material.dart';
+
+import 'package:local_library/core/constants/types.dart';
+
 import 'package:local_library/core/failures/failures.dart';
-import 'package:local_library/core/themes/palette.dart';
 
 /// Common utilities
 class Utils {
@@ -31,6 +31,32 @@ class Utils {
       return 'Ошибка подключения к серверу! Похоже, вы не подключены к сети!';
     } else {
       return failure.toString();
+    }
+  }
+
+  static RequestType parseType(final String type) {
+    switch (type) {
+      case 'temp':
+        return RequestType.temp;
+      case 'active':
+        return RequestType.active;
+      case 'closed':
+        return RequestType.closed;
+      default:
+        return RequestType.temp;
+    }
+  }
+
+  static CustomerStatus parseStatus(final String status) {
+    switch (status) {
+      case 'user':
+        return CustomerStatus.user;
+      case 'admin':
+        return CustomerStatus.admin;
+      case 'moderator':
+        return CustomerStatus.moderator;
+      default:
+        return CustomerStatus.undefined;
     }
   }
 }
