@@ -2,6 +2,10 @@
 
 Simple local library application (with emphasis on IOS design :) ).
 
+Test access: 
+ - admin: mrrooots abc
+ - user: a a
+
 App store all information remotely using [Supabase](https://supabase.com/) database and storage.
 Database access via pure http requests according to [PosgREST](https://postgrest.org/en/stable/api.html) documenation. 
 Implemented own simple [SupabaseAPI](https://github.com/MrRooots/local_library/blob/master/lib/services/supabase_api.dart) with helper function.
